@@ -1,31 +1,76 @@
+const { table } = require('console');
 const { PRIORITY_LOW } = require('constants');
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var server = http.createServer(app);
 var io = require('socket.io')(http);
-var i;
-const mariadb = require('mariadb');
 
-  mariadb.createConnection({
-    host: '127.0.0.1', 
-    database : 'test',
-    user: 'root', 
-    password: 'root'
-  })
-    .then(conn => {
-      conn.query("select 1", [2])
-        .then(rows => {
-          console.log(rows); // [{ "1": 1 }]
-          conn.end();
-        })
-        .catch(err => { 
-          //handle query error
-        });
-    })
-    .catch(err => {
-      //handle connection error
-    });
+const mariadb = require('mariadb');
+const ClientBDD = mariadb.createPool({
+     host: '127.0.0.1', 
+     user:'root', 
+     password: 'root',
+     database: 'krakn',
+     port : '3306',
+     connectionLimit: 5
+});
+
+// var QUERY = "SELECT User_ID FROM login";
+// var UserBDD = ClientBDD.query(QUERY);
+// console.log(UserBDD.rows);
+
+//   ClientBDD.query('SELECT * FROM message', function(err, rows, fields) {
+//     if (err) throw err;
+//     console.log(rows);
+//     });
+
+
+
+// ClientBDD.getConnection()
+//     .then(conn => {
+    
+//       conn.query("SELECT 1 as val")
+//         .then((rows) => {
+//           console.log(rows); //[ {val: 1}, meta: ... ]
+//           //Table must have been created before 
+//           // " CREATE TABLE myTable (id int, val varchar(255)) "
+//           return conn.query("SELECT User_ID FROM login WHERE Username='Pierrot'");
+//         })
+//         .then((res) => {
+//           console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+//           conn.end();
+//         })
+//         .catch(err => {
+//           //handle error
+//           console.log(err); 
+//           conn.end();
+//         })
+        
+//     }).catch(err => {
+//       //not connected
+//     });
+
+
+
+
+
+
+
+
+
+function BDD_save_message(Table,Username,Message){
+  var QUERY = "INSERT INTO " + Table +" (ID_User,Username, Message) VALUES ('1','"+Username+"', '"+Message+"')";
+  console.log('bonjour');
+  ClientBDD.query(QUERY)
+}
+function BDD_Check_User(Table,Username,Password){
+  var Password_Secret = ClientBDD.password(Password);
+  var QUERY = "INSERT INTO "+ Table + " (Username, Password) VALUES ('"+Username+"', '"+Password_Secret+"')";
+  ClientBDD.query(QUERY)
+}
+
+
+
 
 /**
  * Gestion des requêtes HTTP des utilisateurs en leur renvoyant les fichiers du dossier 'public'
@@ -141,6 +186,7 @@ io.on('connection', function (socket) {
   socket.on('chat-message', function (message) {
     // On ajoute le username au message et on émet l'événement
     message.username = loggedUser.username;
+    BDD_save_message("message",message.username,message.text);
     io.emit('chat-message', message);
     // Sauvegarde du message
     messages.push(message);
@@ -174,11 +220,12 @@ io.on('connection', function (socket) {
   });
 });
 
+
+
 /**
  * Lancement du serveur en écoutant les connexions arrivant sur le port 3000
  */
-server.listen(8000,'192.168.43.161',function(){
-  server.close(function(){
-    server.listen(8001,'192.168.43.162')
-  })
- })
+
+http.listen(3000, function () {
+  console.log('Server is listening on *:3000');
+});

@@ -20,6 +20,7 @@ function scrollToBottom() {
  * Connexion de l'utilisateur
  * Uniquement si le username n'est pas vide et n'existe pas encore
  */
+
 $('#login form').submit(function (e) {
   e.preventDefault();
   var user = {

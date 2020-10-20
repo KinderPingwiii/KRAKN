@@ -1,0 +1,12 @@
+{
+  "name": "my-first-chat",
+  "version": "0.0.2",
+  "description": "my first socket.io app",
+  "dependencies": {},
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "TestMariaDB.js",
+  "author": "",
+  "license": "ISC"
+}
