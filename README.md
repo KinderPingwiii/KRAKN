@@ -32,7 +32,11 @@ Afin de réaliser ce projet, nous avons utilisé :
 4. Créer la base de données
 5. Lancer le serveur avec Node.js Server
 
+# Base de données
 
+2 tables :
+  * login : userID; Username; Password; Verified
+  * messages : userID; Message; Username
 
 
 [![Run on Repl.it](https://repl.it/badge/github/KinderPingwiii/KRAKN)](https://repl.it/github/KinderPingwiii/KRAKN)
