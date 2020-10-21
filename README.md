@@ -24,9 +24,13 @@ Afin de réaliser ce projet, nous avons utilisé :
   * MariaDB : Base de données relationelle OpenSource créée sur des valeurs de performances et de stabilité.
 
 
-# Méthode de compilation/installation
+# Méthode d'installation
 
-
+1. Télécharger l'ensemble du packet disponible sur GitHub.com.
+2. Utiliser l'invite de commande pour exécuter la commande "npm install packet.json" dans le dossier une fois celui-ci téléchargé.
+3. Installer MariaDB.
+4. Créer la base de données
+5. Lancer le serveur avec Node.js Server
 
 
 
